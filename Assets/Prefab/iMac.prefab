@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 192.168.1.0
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -689,6 +689,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7385340973938431327}
+  - component: {fileID: 7608953862844077265}
   m_Layer: 0
   m_Name: iMac
   m_TagString: Untagged
@@ -706,7 +707,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 1.296, y: 1.4602488, z: -7.101}
-  m_LocalScale: {x: 0.40000015, y: 0.4, z: 0.40000015}
+  m_LocalScale: {x: 0.40000018, y: 0.4, z: 0.40000018}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2567140810827001841}
@@ -714,6 +715,19 @@ Transform:
   - {fileID: 6926208525059328610}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &7608953862844077265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7629117639456570237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702fa975d11e3274a8c1128d95802e5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMeshPro: {fileID: 6057489435364568113}
 --- !u!1 &8729442655459331026
 GameObject:
   m_ObjectHideFlags: 0
