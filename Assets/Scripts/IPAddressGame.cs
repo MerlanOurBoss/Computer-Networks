@@ -9,6 +9,7 @@ public class IPAddressGame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultText;  // Для подсказки результата
     private List<string> allIPs = new List<string>(); // Хранит все IP-адреса
     private string targetIP; // Случайно выбранный целевой IP
+    public bool isStarted = false;
 
     private void Start()
     {
@@ -27,13 +28,19 @@ public class IPAddressGame : MonoBehaviour
             Debug.LogError("Нет IP-адресов для игры!");
             return;
         }
+    }
+    private void Update()
+    {
+        if (isStarted)
+        {
+            // Выбираем случайный IP из списка
+            targetIP = allIPs[Random.Range(0, allIPs.Count)];
 
-        // Выбираем случайный IP из списка
-        targetIP = allIPs[Random.Range(0, allIPs.Count)];
-
-        // Отображаем целевой IP на экране
-        targetIPText.text = "Найди этот IP: " + targetIP;
-        resultText.text = ""; // Очищаем текст результата
+            // Отображаем целевой IP на экране
+            targetIPText.text = "Найди этот IP: " + targetIP;
+            resultText.text = ""; // Очищаем текст результата
+            isStarted = false;
+        }
     }
 
     public void CheckIPAddress(string playerChoice)
