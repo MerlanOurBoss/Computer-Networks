@@ -6,12 +6,11 @@ using UnityEngine;
 public class PickItem : MonoBehaviour
 {
     public GameObject parent;
-    public GameObject tip;
     public GameObject shpereTip;
+    public GameObject shpereTipStart;
     private bool isPickable = false;
     private void OnTriggerEnter(Collider other)
     {
-        tip.SetActive(true);
         isPickable = true;
     }
 
@@ -20,14 +19,13 @@ public class PickItem : MonoBehaviour
         if (isPickable && Input.GetKey(KeyCode.E))
         {
             parent.SetActive(false);
-            tip.SetActive(false);
             shpereTip.SetActive(true);
+            shpereTipStart.SetActive(false);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        tip.SetActive(false);
         isPickable = false;
     }
 }
