@@ -6,10 +6,12 @@ using UnityEngine;
 public class OnTriggerIPaddress : MonoBehaviour
 {
     public GameObject ip;
-
     private IPAddressGame ipaddressGame;
+    private GameObject _player;
+    public GameObject _miniGame;
     private void Start()
     {
+        _player = GameObject.FindGameObjectWithTag("MainCamera");
         ipaddressGame = FindObjectOfType<IPAddressGame>();
         Debug.Log(ipaddressGame.name);
     }
@@ -22,8 +24,9 @@ public class OnTriggerIPaddress : MonoBehaviour
         if (Input.GetKey(KeyCode.E))
         {
             ipaddressGame.CheckIPAddress(ip.GetComponentInChildren<TextMeshProUGUI>().text.ToString());
+            _miniGame.SetActive(true);
+            _player.SetActive(false);
         }
-        Debug.Log(ip.GetComponentInChildren<TextMeshProUGUI>().text.ToString());
     }
 
     private void OnTriggerExit(Collider other)
