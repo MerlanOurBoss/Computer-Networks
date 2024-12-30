@@ -8,7 +8,8 @@ public class OnTriggerPressed : MonoBehaviour
     public GameObject rj45;
     public GameObject rj45_router;
     public Toggle task;
-    public IPAddressGame pv4Address;
+    public GameObject tip2;
+    
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "MainCamera")
@@ -18,8 +19,8 @@ public class OnTriggerPressed : MonoBehaviour
                 rj45.SetActive(true);
                 rj45_router.SetActive(true);
                 gameObject.SetActive(false);
+                tip2.SetActive(true);
                 task.isOn = true;
-                pv4Address.isStarted = true;
             }
         } 
     }

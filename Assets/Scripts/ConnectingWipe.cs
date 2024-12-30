@@ -1,4 +1,4 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,27 +8,42 @@ public class ConnectingWipe : MonoBehaviour
 {
     public GameObject _player;
     public Animator wipes;
-    public TMP_Dropdown cableTypeDropdown; // Выпадающее меню для типа кабеля
-    public TMP_Dropdown standard1Dropdown; // Выпадающее меню для первого конца кабеля
-    public TMP_Dropdown standard2Dropdown; // Выпадающее меню для второго конца кабеля
-    public TextMeshProUGUI feedbackText; // Текст подсказки
+    public TMP_Dropdown cableTypeDropdown; // Р’С‹РїР°РґР°СЋС‰РµРµ РјРµРЅСЋ РґР»СЏ С‚РёРїР° РєР°Р±РµР»СЏ
+    public TMP_Dropdown standard1Dropdown; // Р’С‹РїР°РґР°СЋС‰РµРµ РјРµРЅСЋ РґР»СЏ РїРµСЂРІРѕРіРѕ РєРѕРЅС†Р° РєР°Р±РµР»СЏ
+    public TMP_Dropdown standard2Dropdown; // Р’С‹РїР°РґР°СЋС‰РµРµ РјРµРЅСЋ РґР»СЏ РІС‚РѕСЂРѕРіРѕ РєРѕРЅС†Р° РєР°Р±РµР»СЏ
+    public TextMeshProUGUI feedbackText; // РўРµРєСЃС‚ РїРѕРґСЃРєР°Р·РєРё
     public Manager man;
     public GameObject miniGame;
 
+    public GameObject T568A;
+    public GameObject T568B;
+    private bool isCorrect = false;
     public void Start()
     {
-        Cursor.lockState = CursorLockMode.None;
         _player = GameObject.FindGameObjectWithTag("MainCamera");
-        if (_player == null)
-        {
-            Debug.Log("djansdojanw");
-        }
         man = FindObjectOfType<Manager>();
+        RandomizeDropdownValues();
     }
 
     private void Update()
     {
-        Cursor.lockState = CursorLockMode.None;
+        if (standard2Dropdown.options[standard2Dropdown.value].text == "T568A")
+        {
+            T568A.SetActive(true);
+            T568B.SetActive(false);
+        }
+        else
+        {
+            T568A.SetActive(false);
+            T568B.SetActive(true);
+        }
+    }
+
+    public void RandomizeDropdownValues()
+    {
+        cableTypeDropdown.value = Random.Range(0, cableTypeDropdown.options.Count);
+        standard1Dropdown.value = Random.Range(0, standard1Dropdown.options.Count);
+        standard2Dropdown.value = Random.Range(0, standard2Dropdown.options.Count);
     }
     public void CheckConnection(string connectionType)
     {
@@ -36,41 +51,42 @@ public class ConnectingWipe : MonoBehaviour
         string standard1 = standard1Dropdown.options[standard1Dropdown.value].text;
         string standard2 = standard2Dropdown.options[standard2Dropdown.value].text;
 
-        bool isCorrect = false;
+        isCorrect = false;
+        feedbackText.text = "";
         Debug.Log(cableType + " " + standard1 + " " + standard2);
         switch (connectionType)
         {
             case "RouterToSwitch":
-                if (cableType == "Прямой" && standard1 == standard2)
+                if (cableType == "РўС–РєРµР»РµР№" && standard1 == standard2)
                 {
                     isCorrect = true;
                 }
                 else
                 {
-                    feedbackText.text = "Для подключения роутера к коммутатору нужен прямой кабель с одинаковыми стандартами!";
+                    feedbackText.text = "РњР°СЂС€СЂСѓС‚РёР·Р°С‚РѕСЂРґС‹ РєРѕРјРјСѓС‚Р°С‚РѕСЂТ“Р° Т›РѕСЃСѓ ТЇС€С–РЅ Р±С–СЂРґРµР№ СЃС‚Р°РЅРґР°СЂС‚С‚Р°СЂТ“Р° РёРµ С‚ТЇР·Сѓ РєР°Р±РµР»СЊ Т›Р°Р¶РµС‚!";
                 }
                 break;
 
             case "ComputerToSwitch":
-                if (cableType == "Прямой" && standard1 == standard2)
+                if (cableType == "РўС–РєРµР»РµР№" && standard1 == standard2)
                 {
                     isCorrect = true;
                 }
                 else
                 {
-                    feedbackText.text = "Для подключения компьютера к коммутатору нужен прямой кабель с одинаковыми стандартами!";
+                    feedbackText.text = "РљРѕРјРїСЊСЋС‚РµСЂРґС– РєРѕРјРјСѓС‚Р°С‚РѕСЂТ“Р° Т›РѕСЃСѓ ТЇС€С–РЅ Р±С–СЂРґРµР№ СЃС‚Р°РЅРґР°СЂС‚С‚Р°СЂТ“Р° РёРµ С‚С–РєРµР»РµР№ РєР°Р±РµР»СЊ Т›Р°Р¶РµС‚!";
                 }
                 break;
 
             case "SwitchToSwitch":
             case "RouterToRouter":
-                if (cableType == "Кроссовый" && standard1 != standard2)
+                if (cableType == "РљСЂРµСЃС‚" && standard1 != standard2)
                 {
                     isCorrect = true;
                 }
                 else
                 {
-                    feedbackText.text = "Для подключения одинаковых устройств нужен кроссовый кабель с разными стандартами!";
+                    feedbackText.text = "Р‘С–СЂРґРµР№ Т›Т±СЂС‹Р»Т“С‹Р»Р°СЂРґС‹ Т›РѕСЃСѓ ТЇС€С–РЅ У™СЂС‚ТЇСЂР»С– СЃС‚Р°РЅРґР°СЂС‚С‚Р°СЂС‹ Р±Р°СЂ РєСЂРѕСЃСЃРѕРІРµСЂ РєР°Р±РµР»С– Т›Р°Р¶РµС‚!";
                 }
                 break;
         }
@@ -85,9 +101,9 @@ public class ConnectingWipe : MonoBehaviour
 
     private IEnumerator WaitForFiveSeconds()
     {
-        // Ждём 5 секунд
+        // Р–РґС‘Рј 5 СЃРµРєСѓРЅРґ
         yield return new WaitForSeconds(5f);
-
+        Cursor.lockState = CursorLockMode.Locked;
         _player.SetActive(true);
         miniGame.SetActive(false);
     }

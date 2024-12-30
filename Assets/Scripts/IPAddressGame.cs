@@ -1,60 +1,137 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class IPAddressGame : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI targetIPText; // Для отображения целевого IP
-    [SerializeField] private TextMeshProUGUI resultText;  // Для подсказки результата
-    private List<string> allIPs = new List<string>(); // Хранит все IP-адреса
-    private string targetIP; // Случайно выбранный целевой IP
+    [SerializeField] private TextMeshProUGUI targetIPText; // Р”Р»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С†РµР»РµРІРѕРіРѕ IP
+    [SerializeField] private TextMeshProUGUI resultText;  // Р”Р»СЏ РїРѕРґСЃРєР°Р·РєРё СЂРµР·СѓР»СЊС‚Р°С‚Р°
+
+    [SerializeField] private TextMeshProUGUI timerText;    // Р”Р»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С‚Р°Р№РјРµСЂР°
+    [SerializeField] private float maxTime = 120f;
+
+    private List<string> allIPs = new List<string>(); // РҐСЂР°РЅРёС‚ РІСЃРµ IP-Р°РґСЂРµСЃР°
+    private string targetIP; // РЎР»СѓС‡Р°Р№РЅРѕ РІС‹Р±СЂР°РЅРЅС‹Р№ С†РµР»РµРІРѕР№ IP
     public bool isStarted = false;
+    private bool isGameOver = false;
+
+    private float remainingTime; // РћСЃС‚Р°РІС€РµРµСЃСЏ РІСЂРµРјСЏ
+    private bool isTimerRunning = true;
 
     private void Start()
     {
-        // Находим все объекты с IP адресами
         IPv4Address[] ipScripts = FindObjectsOfType<IPv4Address>();
         foreach (IPv4Address script in ipScripts)
         {
-            // Собираем все IP адреса в список
-
             allIPs.Add(script.textMeshPro.text);
         }
 
-        // Проверка наличия IP-адресов
         if (allIPs.Count == 0)
         {
-            Debug.LogError("Нет IP-адресов для игры!");
+            Debug.LogError("РќРµС‚ IP-Р°РґСЂРµСЃРѕРІ РґР»СЏ РёРіСЂС‹!");
             return;
         }
+        StartTimer();
     }
     private void Update()
     {
-        if (isStarted)
+        if (isStarted && !isGameOver)
         {
-            // Выбираем случайный IP из списка
+            NextTargetIP();
+            isStarted = false;
+        }
+        if (isTimerRunning)
+        {
+            UpdateTimer();
+        }
+        else if (!isTimerRunning)
+        {
+            EndGame();
+        }
+    }
+
+    public void NextTargetIP()
+    {
+        if (isGameOver) return;
+
+        if (allIPs.Count > 0)
+        {
             targetIP = allIPs[Random.Range(0, allIPs.Count)];
 
-            // Отображаем целевой IP на экране
-            targetIPText.text = "Найди этот IP: " + targetIP;
-            resultText.text = ""; // Очищаем текст результата
-            isStarted = false;
+            targetIPText.text = "РњС‹РЅР° IP-РґС– С‚Р°Р±С‹ТЈС‹Р·: " + targetIP;
+            resultText.text = "";
+        }
+        else
+        {
+            EndGame();
         }
     }
 
     public void CheckIPAddress(string playerChoice)
     {
         Debug.Log(playerChoice + " " + targetIP);
-        // Сравниваем выбор игрока с целевым IP
+
         if (playerChoice == targetIP)
         {
-            
-            resultText.text = "Правильно! Ты нашел IP: " + targetIP;
+            resultText.text = "Р”Т±СЂС‹СЃ! РЎС–Р· IP-РґС– С‚Р°РїС‚С‹ТЈС‹Р·: " + targetIP;
+
+            allIPs.Remove(targetIP);
+
+            StartCoroutine(LoadNextIP());
         }
         else
         {
-            resultText.text = "Неправильно! Попробуй снова.";
+            resultText.text = "Р”Т±СЂС‹СЃ РµРјРµСЃ! ТљР°Р№С‚Р°РґР°РЅ Р±Р°Р№Т›Р°Рї РєУ©СЂС–ТЈС–Р·.";
         }
+    }
+
+    private IEnumerator LoadNextIP()
+    {
+        yield return new WaitForSeconds(2.0f);
+        NextTargetIP();
+    }
+    private void StartTimer()
+    {
+        if (isGameOver) return;
+
+        remainingTime = maxTime;
+        isTimerRunning = true;
+        UpdateTimerText();
+    }
+
+    private void StopTimer()
+    {
+        isTimerRunning = false;
+    }
+
+    private void UpdateTimer()
+    {
+        remainingTime -= Time.deltaTime;
+        UpdateTimerText();
+
+        if (remainingTime <= 0)
+        {
+            OnTimeOut();
+        }
+    }
+
+    private void UpdateTimerText()
+    {
+        timerText.text = "ТљР°Р»Т“Р°РЅ СѓР°Т›С‹С‚: " + Mathf.Ceil(remainingTime).ToString();
+    }
+
+    private void OnTimeOut()
+    {
+        StopTimer();
+    }
+
+    private void EndGame()
+    {
+        isGameOver = true; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј С„Р»Р°Рі Р·Р°РІРµСЂС€РµРЅРёСЏ РёРіСЂС‹
+        targetIPText.text = "РћР№С‹РЅ Р°СЏТ›С‚Р°Р»РґС‹! Р±Р°СЂР»С‹Т› IP РјРµРєРµРЅР¶Р°Р№Р»Р°СЂС‹ С‚Р°Р±С‹Р»РґС‹.";
+        resultText.text = "";
+        timerText.text = "";
+        StopTimer();
     }
 }

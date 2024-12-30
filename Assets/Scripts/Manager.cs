@@ -1,4 +1,4 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,7 +11,7 @@ public class Manager : MonoBehaviour
 
     private void Update()
     {
-        scoreText.text = "Подключено компьютеров к коммутатору: " + score;
+        scoreText.text = "РљРѕРјРјСѓС‚Р°С‚РѕСЂТ“Р° Т›РѕСЃС‹Р»Т“Р°РЅ РєРѕРјРїСЊСЋС‚РµСЂР»РµСЂ: " + score;
         Debug.Log(score);
     }
 }

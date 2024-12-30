@@ -24,6 +24,7 @@ public class OnTriggerIPaddress : MonoBehaviour
         if (Input.GetKey(KeyCode.E))
         {
             ipaddressGame.CheckIPAddress(ip.GetComponentInChildren<TextMeshProUGUI>().text.ToString());
+            Cursor.lockState = CursorLockMode.None;
             _miniGame.SetActive(true);
             _player.SetActive(false);
         }
